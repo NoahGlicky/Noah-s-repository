@@ -1,0 +1,39 @@
+class VendingMachine:
+    def __init__(self):
+        self.items = {
+            "A1": {"name": "Soda", "price": 1.25, "stock": 5},
+            "A2": {"name": "Chips", "price": 1.00, "stock": 5},
+            "A3": {"name": "Candy", "price": 0.75, "stock": 5},
+        }
+
+    def display_items(self):
+        print("Available items:")
+        for code, item in self.items.items():
+            print(f"{code}: {item['name']} - ${item['price']} (Stock: {item['stock']})")
+
+    def purchase_item(self, code, payment):
+        if code in self.items:
+            item = self.items[code]
+            if item["stock"] > 0:
+                if payment >= item["price"]:
+                    item["stock"] -= 1
+                    change = payment - item["price"]
+                    print(f"You bought {item['name']}! Change: ${change:.2f}")
+                else:
+                    print("Insufficient payment. Please try again.")
+            else:
+                print("Sorry, this item is out of stock.")
+        else:
+            print("Invalid item code.")
+
+def main():
+    machine = VendingMachine()
+    machine.display_items()
+    
+    code = input("Enter the item code you want to purchase: ").strip().upper()
+    payment = float(input("Enter your payment amount: "))
+    
+    machine.purchase_item(code, payment)
+
+if __name__ == "__main__":
+    main()
