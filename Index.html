@@ -1,38 +1,137 @@
-class VendingMachine:
-    def __init__(self):
-        self.items = {
-            "A1": {"name": "Soda", "price": 1.25, "stock": 5},
-            "A2": {"name": "Chips", "price": 1.00, "stock": 5},
-            "A3": {"name": "Candy", "price": 0.75, "stock": 5},
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decision Making Based on Graphs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            width: 150px;
+        }
+        .input-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        #decision {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Decision Making Based on Graphs</h1>
+        <div class="input-container">
+            <label for="profit">Profit ($): </label>
+            <input type="number" id="profit" placeholder="Enter profit">
+            <label for="expenses">Expenses ($): </label>
+            <input type="number" id="expenses" placeholder="Enter expenses">
+            <button onclick="generateGraph()">Generate Graph</button>
+        </div>
 
-    def display_items(self):
-        print("Available items:")
-        for code, item in self.items.items():
-            print(f"{code}: {item['name']} - ${item['price']} (Stock: {item['stock']})")
+        <canvas id="barChart" width="500" height="400"></canvas>
 
-    def purchase_item(self, code, payment):
-        if code in self.items:
-            item = self.items[code]
-            if item["stock"] > 0:
-                if payment >= item["price"]:
-                    item["stock"] -= 1
-                    change = payment - item["price"]
-                    print(f"You bought {item['name']}! Change: ${change:.2f}")
-                else:
-                    print("Insufficient payment. Please try again.")
-            else:
-                print("Sorry, this item is out of stock.")
-        else:
-            print("Invalid item code.")
+        <div id="decision"></div>
+    </div>
 
-def main():
-    machine = VendingMachine()
-    machine.display_items()
-    
-    code = input("Enter the item code you want to purchase: ").strip().upper()
-    payment = float(input("Enter your payment amount: "))
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Function to generate bar chart and make decisions
+        function generateGraph() {
+            // Get the user input values
+            const profit = parseFloat(document.getElementById('profit').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+
+            // Validate inputs
+            if (isNaN(profit) || isNaN(expenses)) {
+                alert("Please enter valid profit and expense values.");
+                return;
+            }
+
+            // Create a bar chart using Chart.js
+            const ctx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Profit', 'Expenses'],
+                    datasets: [{
+                        label: 'Amount ($)',
+                        data: [profit, expenses],
+                        backgroundColor: ['#4CAF50', '#F44336'],
+                        borderColor: ['#388E3C', '#D32F2F'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Amount ($)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Decision Making based on the graph
+            let decisionText = "";
+            if (profit > expenses) {
+                decisionText = "Business is profitable!";
+            } else if (expenses > profit) {
+                decisionText = "Consider cutting costs.";
+            } else {
+                decisionText = "Break-even: No profit, no loss.";
+            }
+
+            // Display decision below the graph
+            document.getElementById('decision').textContent = decisionText;
+        }
+    </script>
+</body>
+</html>
     machine.purchase_item(code, payment)
 
 if __name__ == "__main__":
