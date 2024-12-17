@@ -12,25 +12,34 @@
             background-color: #f4f4f4;
         }
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 1000px;
             margin: auto;
             padding: 20px;
             background-color: white;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
         h1 {
             text-align: center;
             color: #333;
+            font-size: 2em;
         }
         .input-container {
             text-align: center;
             margin-bottom: 20px;
+        }
+        .input-container label {
+            font-size: 16px;
+            margin-right: 10px;
         }
         .input-container input {
             padding: 10px;
             margin: 5px;
             font-size: 16px;
             width: 150px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
         .input-container button {
             padding: 10px 20px;
@@ -56,6 +65,10 @@
             margin-top: 20px;
             color: #333;
         }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -63,15 +76,16 @@
         <h1>Decision Making Based on Graphs</h1>
         <div class="input-container">
             <label for="profit">Profit ($): </label>
-            <input type="number" id="profit" placeholder="Enter profit">
+            <input type="number" id="profit" placeholder="Enter profit" min="0">
             <label for="expenses">Expenses ($): </label>
-            <input type="number" id="expenses" placeholder="Enter expenses">
+            <input type="number" id="expenses" placeholder="Enter expenses" min="0">
             <button onclick="generateGraph()">Generate Graph</button>
         </div>
 
         <canvas id="barChart" width="500" height="400"></canvas>
 
         <div id="decision"></div>
+        <div id="error-message" class="error"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -81,10 +95,19 @@
             // Get the user input values
             const profit = parseFloat(document.getElementById('profit').value);
             const expenses = parseFloat(document.getElementById('expenses').value);
+            const errorMessage = document.getElementById('error-message');
+            
+            // Clear any previous error message
+            errorMessage.textContent = '';
 
             // Validate inputs
             if (isNaN(profit) || isNaN(expenses)) {
-                alert("Please enter valid profit and expense values.");
+                errorMessage.textContent = "Please enter valid profit and expense values.";
+                return;
+            }
+
+            if (profit < 0 || expenses < 0) {
+                errorMessage.textContent = "Profit and expenses must be non-negative values.";
                 return;
             }
 
@@ -128,11 +151,11 @@
 
             // Display decision below the graph
             document.getElementById('decision').textContent = decisionText;
+
+            // Optionally reset the form after generating the graph
+            // document.getElementById('profit').value = '';
+            // document.getElementById('expenses').value = '';
         }
     </script>
 </body>
 </html>
-    machine.purchase_item(code, payment)
-
-if __name__ == "__main__":
-    main()
